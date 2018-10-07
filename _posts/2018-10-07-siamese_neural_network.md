@@ -1,0 +1,121 @@
+---
+layout: post
+title: Variational Auto Encoder의 이해
+tags: [Test, Markdown]
+---
+
+2014년 Auto-Encoding Variational Bayes, 2014(paper)가 등장한지 벌써 5년이 되어갑니다. 많은 시간이 흘러갔지만 아직도 수많은 논문과 연구에서는 VAE에 사용된 개념과 목적함수 ELBO가 반복적으로 등장하고 있습니다. 이에 VAE가 어떤 알고리즘인지, 그리고 그 안에는 어떤 철학이 담겨져있는지 중요하다고 생각되는 부분에 대해 공부한 내용을 담아보겠습니다.
+
+위의 논문의 흐름에 따라 정리한 것은 아니며, 수학적인 의미 해석과 전개 과정을 중심으로 다루겠습니다.
+
+_ _ _
+### AE / VAE의 개요
+![AE arch](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_003.jpeg?raw=true)
+
+Auto Encoder의 구조는 Encoder와 Decoder 두 파트로 구성됩니다. 어떤 입력 $$X$$에 대한 Embedding을 통해 압축된 정보를 Latent Variables에 담고, 이 Latent Variables로부터 다시 자기 자신($$\hat{X}$$)를 복호화 하는 알고리즘이라고 볼 수 있습니다. 주로 사용되는 분야로는 Encoder를 통해 정보를 압축하거나 Decoder를 통해 정보를 복원하는 등의 역할을 수행할 수 있으며, 특징 추출 또는 정보 압축분야에 사용되는 PCA와 수학적 유사한 의미를 지니게 됩니다(수학적인 의미는 생략). 그리고 노이즈가 포함된 입력에 대하여 노이즈를 제거하는 De-nosing 문제에 효과적으로 사용될 수 있습니다.
+
+![AE arch expr1](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_004.jpeg?raw=true)
+
+한단계만 더 들여다 보겠습니다. 64x64 픽셀의 얼굴 이미지들이 있다고 하겠습니다. 4096차원의 입력 이미지는 Encoder를 통해 저차원의 Hidden 공간으로 압축됩니다. 예를 들자면 피부색, 성별, 눈, 코, 입, 귀라는 6가지 특징들로 압축되었다고 가정하겠습니다. (이렇게 의미있는 정보가 담긴 압축된 hidden 차원 공간을 Latent Space, 이 변수들을 Latent Variables라 합니다.)
+
+Decoder의 과정은 다시 피부색, 성별, 눈, 코, 입, 귀 의 특징값에 해당하는 새로운 얼굴 이미지를 생성하게 됩니다. 예로써 얼굴이 검고, 남자이며, 눈이 작고, 코가 크고, 입이 작으며, 귀가 큰 사람의 얼굴을 상상한다고 보시면 되겠습니다.
+
+
+![AE arch expr2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_005.jpeg?raw=true)
+
+Latent Space에는 입력 데이터들에 대해서 어떤 특징들로써 정보를 함축하고 있습니다. 그렇다면 <b>“Latent Space로부터 데이터를 생성해 낼 수는 없을까?”</b>라는 점에서 VAE가 주목받습니다.
+
+### VAE(Variational Auto-Encoder)
+![VAE arch expr1](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_006.jpeg?raw=true)
+
+가지고 있는 데이터($$X$$)들은 너무 많고 고차원입니다. 그래서 새로운 데이터를 만들기가 어렵습니다. 만약, 샘플($$X$$)들의 분포를 사전에 알고있는 어떤 분포로 표현할 수 있다면, 이 분포 내에서 샘플링을 통해 새로운 데이터 $$\hat{X}$$를 추정해낼 수 있을 것입니다. (실제 데이터의 분포와 알고있는 어떤 분포를 맵핑시켜서)
+
+그래서 AutoEncoder의 Latent Space가 우리가 잘 아는 정규분포를 따른다면, 이 분포는 평균(mu)과 표준편차(sigma)만 구해낸다면 분포를 표현할 수 있습니다.
+
+따라서 Encoder의 출력이 mu($$\mu$$)와 sigma($$\sigma$$)가 된다면, 정규분포 $$N(\mu, \sigma)$$에서 샘플링을 통해 잠재 변수 $$z$$를 생성해낼수 있고, 생성된 잠재변수 $$z$$는 다시 Decoder를 통해 입력된 샘플 x의 분포로 맵핑되어 대응하는 새로운 데이터를 추정할 수 있습니다.
+
+
+![VAE arch expr2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_007.jpeg?raw=true)
+
+그런데 샘플링을 하게 되면 Random성을 띄기 때문에 학습을 할수 없게 됩니다. 그래서 논문에서는 Reparametrization trick이라는 트릭을 통해서 $$N(\mu, \sigma) + e$$, $$e~N(0,1)$$와 같이 e를 출력에 더해주는 형태를 취해 $$z$$ 값에 encoder가 미치는 영향 관계를 찾을 수 있게 됩니다. 즉, 미분이 가능한 모델로 표현이 가능합니다.
+
+### KL Divergence
+![VAE - KL div](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_008.jpeg?raw=true)
+
+VAE의 구조에 대한 설명은 위와 같고, 학습하기 위한 목적함수에 대해 설명드리기에 앞서 KL Divergence에 대해 간략하게 소개드리겠습니다.
+
+먼저 Divergence는 두 확률 분포의 다름의 정도를 나타내는 것입니다. KL Divergence는 Divergence의 한가지 방법으로 위 식과 같습니다.
+
+![VAE - KL div2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_009.jpeg?raw=true)
+
+이때, KL Divergence의 성질은 위와 같습니다. 수식의 전개과정도 중요하지만 위 특징을 기억하시면 좋을 것 같습니다.
+
+![VAE - KL div3](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_010.jpeg?raw=true)
+
+만약 다름을 비교할 두 확률분포가 정규분포를 따를 경우에 KLD의 식은 위와같이 전개되어 간략하게 표현이 가능해 집니다.
+
+### Bayes Rule
+![VAE - Bayes Rule](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_011.jpeg?raw=true)
+
+유명한 베이즈 정리입니다. 이 정리는 목적함수를 계산하는데 매우 중요한 역할을 하게 되니 기억해주세요.
+
+### Monte Calro Approximation
+![VAE - MonteCalro](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_012.jpeg?raw=true)
+
+Monte Carlo Approximation.. 복잡한 내용들이 배경에 있는 것으로 알고있습니다.
+
+다만, 위 식은 <b>“확률 밀도 함수 $$P(x)$$를 따르는 $$x$$에 대한 $$f(x)$$의 기대값은 $$P(x)$$를 따르는 샘플들로 근사할 수 있다”</b> 라고 이해하실 수 있습니다.
+
+### 목적함수 : ELBO(Evidence Lower Bound)
+![VAE - ELBO step1,2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_013.jpeg?raw=true)
+
+그래서 Step1) 우리는 주어진 샘플 $$X$$의 확률 분포를 잘 표현해보자 라는 것을 식으로 표현하면 이렇습니다. $$P(X)$$는 베이즈 정리에 의해 치환될 수 있고, 이때 우리는 (알고있는) 잠재변수(Latent Variables) $$z$$의 분포를 이용합니다.
+
+그리고 확률 $$P(X)$$는 잠재변수 $$z$$의 확률 밀도함수의 성질을 통해 Step2와 같이 나타낼 수 있습니다. $$P(x)$$의 식에 다시 자기 자신을 포함하는 재귀 형태로 식이 표현됩니다.
+
+![VAE - ELBO step3](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_014.jpeg?raw=true)
+
+Step1의 식을 Step2의 식에 대입합니다.
+
+먼저 노란색 부분은 앞서 설명드린 Monte Carlo Approximation에 의해 기대값으로 근사하여 표현할 수 있습니다. 그리고 초록색 밑줄과 같은 Term을 더하고 빼서 식의 등식이 유지될 수 있게 합니다. 그렇게 되면, 앞서 소개드린 KL Divergence의 식이 위 식 전개과정에 두개나 생겨납니다.
+
+파란색 밑줄 부분은 잠재변수 $$z$$가 우리가 알고있는 확률 분포(정규분포)를 따르기 때문에 KLD의 계산이 쉽습니다.
+
+빨간색 밑줄 부분은 가지고 있는 샘플 $$X$$의 복잡한 분포를 우리는 실제로 알고있지 못하기 때문에
+$$ P(z|x_i) $$
+를 계산할 수 없습니다. 다만, KLD는 항상 0 이상의 값을 갖는다는 특성이 있습니다. 그래서 빨간색 밑줄 부분을 제외한 나머지 부분은 항상 본 식보다 작거나 같다 라는 부등호로 식이 만들어집니다.
+
+
+![VAE - ELBO step4](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_015.jpeg?raw=true)
+
+그래서 위 노란색 박스의 식과 같이 우리는 가지고 있는 데이터 X의 분포를 잘 표현해보자 라는 목적을 가지고 위와 같은 식에 도달하였습니다. 결국 우리는 분포를 잘 표현해보자 라는 목적에 부합하기 위해 $$ \log P(x) $$가 최대가 되는 방향으로 모델을 학습하면 됩니다.
+
+KLD 부분의 식의 구현은 
+$$ q(z | {x_i} ) $$
+는 주어진 샘플 $$ {x_i} $$에 대해 Encoder를 통과해 얻어진 $$\mu$$와 $$\sigma$$를 따르는 정규분포가 될 것이며, $$ P(z) $$는 $$ z~N(0, 1) $$를 만족한다고 할때, 모두 정규분포이므로 간단하게 표현할 수 있습니다.
+
+![VAE - ELBO step4-2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_016.jpeg?raw=true)
+
+앞의 Term을 해석하자면 샘플 $$x$$가 주어졌을 때, $$z$$가 encoder의 결과로 얻어진 분포를 따르고, 이때 다시 $$z$$일때 샘플 $$x$$가 생성될 확률의 기대값…
+
+복잡하지만 결국 입력 데이터가 encoder를 통해 정규분포를 따르는 어떤 공간에 표현되고, 이로부터 다시 decoder를 통과했을 때 $$x$$가 되게끔 하는 것을 목적으로 하는 것입니다.
+
+그렇기에 이 Term은 Reconstruction Error를 의미합니다.
+
+즉, $$x$$가 나타날 확률을 계산하는 것은 우리가 가지고 있는 샘플들에 대한 확률 분포를 찾고자 하는 것이므로, $$z$$로부터 $$x$$가 나타날 확률을 최대화 하는 것이므로 MLE(최우추정법)이 되며 이는 다시 Cross-Entropy로 표현됩니다.
+
+### Experiment
+![VAE - Experiment](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-06-vae/VAE_ELBO_kimsu_017.jpeg?raw=true)
+
+위 이미지들은 VAE의 학습 결과입니다.
+
+왼쪽은 다양한 표정의 사람 얼굴 이미지를 가지고 VAE 학습결과이고, 오른쪽은 MNIST 데이터를 가지고 VAE 학습 결과입니다.
+
+모두 Latent Space 공간을 2차원의 정규분포로 표현한 것이고, 위 이미지의 가운데를 원점으로 정규분포가 생성되어있다고 할 때, 그때의 어떤 위치가 $$z$$가 되고 그 $$z$$를 기반으로 다시 이미지를 생성한 결과입니다.
+
+### 고찰
+VAE의 목적함수 ELBO와 그 안에 포함된 KL Divergence 등은 타 논문들에 자주 등장하는 단골 멘트들입니다. 수식을 자주 목격하지만 그냥 그렇구나 하고 볼때와 의미를 해석하고 볼때는 느껴지는 것은 매우 다른 것 같습니다.
+
+어려운 부분들이 많고 신기할 따름이며 그렇기에 세상에 천재들은 많고 더없이 작아지는 것 같습니다. 잘못된 부분에 대한 커멘트나 부족한 내용에 대한 보충, 궁금하신점이나 어떤 멘트도 환영합니다.
+
+Email: seongukzzz@gmail.com
