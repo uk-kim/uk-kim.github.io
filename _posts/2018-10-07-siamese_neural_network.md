@@ -23,8 +23,26 @@ One-shot classification model의 학습을 위해 image pair들의 class-identit
 
 샴 네트워크는 입력이 구분되는 쌍둥이 네트워크로 구성되어 있으며, 상단에서 에너지 함수로써 네트워크가 연결된다. 이 함수는 고차원의 feature representation 간의 metric으로 계산된다. 쌍둥이 네트워크를 구성하는 파라미터는 공유된다. 네트워크의 파라미터가 공유되기 때문에 유사한 입력 쌍에 대한 두 네트워크의 기능이 동일하기 때문에 차원 공간에서 각각 다른 위치로의 맵핑할 수 없게 한다.
 
+![Siamese NN Architecture1](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_network_architecture_1.jpeg?raw=true)
+
+LeCun이 제안한 방법(2005, [1])에서 저자는 같은 쌍에 대해서는 에너지를 감소하고, 다른 쌍에 대해서는 에너지를 증가시키는 contrastive energy function을 사용하였다.(아래 식4)
+
+$$$ y = 3 $$$
+$$$ Y = \{ \begin{matrix} {0, if \quad X_1\quad and\quad X_2\quad are\quad deemed\quad similar} \\ {1, otherwise} \end{matrix}
+
+$$$
+
+y = \left\{ \begin{matrix} aa \\ bb \end{matrix} \right
+
+$$$
+
+Y = 0 if X1 and X2 are deemed similar,  else Y = 1
+1
+![lecun loss function_1](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_lecun_loss_function_1.jpeg.jpeg?raw=true)
+
+2
+![lecun loss function_2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_lecun_loss_function_2.jpeg.jpeg?raw=true)
 
 
 
-
-Email: seongukzzz@gmail.com
+Email: [seongukzzz@gmail.com](mailto:seongukzzz@gmail.com)
