@@ -92,6 +92,7 @@ theme_settings:
   # Post navigation
   post_navigation: true
   
+  disqus_shortname: uk_kim
   
 # PAGINATION
 paginate: 5
