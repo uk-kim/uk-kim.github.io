@@ -27,13 +27,10 @@ One-shot classification model의 학습을 위해 image pair들의 class-identit
 
 LeCun이 제안한 방법(2005, [1])에서 저자는 같은 쌍에 대해서는 에너지를 감소하고, 다른 쌍에 대해서는 에너지를 증가시키는 contrastive energy function을 사용하였다.(아래 식4)
 
-$$$ y = 3 $$$
-$$$ Y = \{ \begin{matrix} {0, if \quad X_1\quad and\quad X_2\quad are\quad deemed\quad similar} \\ {1, otherwise} \end{matrix}
+$$$ Y = \{ \begin{matrix} {0, if \quad X_1\quad and\quad X_2\quad are\quad deemed\quad similar} \\ {1, otherwise} \end{matrix} $$$
 
 $$$
-
 y = \left\{ \begin{matrix} aa \\ bb \end{matrix} \right
-
 $$$
 
 Y = 0 if X1 and X2 are deemed similar,  else Y = 1
