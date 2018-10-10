@@ -27,21 +27,43 @@ One-shot classification model의 학습을 위해 image pair들의 class-identit
 
 LeCun이 제안한 방법(2005, [1])에서 저자는 같은 쌍에 대해서는 에너지를 감소하고, 다른 쌍에 대해서는 에너지를 증가시키는 contrastive energy function을 사용하였다.(아래 식4)
 
-$$ Y = \{ {0,\quad if \space X_1 \space and \space X_2 \space are \space deemed\space similar} \\ {1,\quad otherwise} $$
-1111
-
-$$ Y = \left\{ {0,\quad if \space X_1 \space and \space X_2 \space are \space deemed\space similar} \\ {1,\quad otherwise} \right $$
-123
 $$
-y = \left\{ \begin{matrix} aa \\ bb \end{matrix} \right
+Y = \{ \begin{matrix} 0,\quad if \space \vec{X_1} \space and \space \vec{X_2} \space are \space deemed\space similar \\ 1,\quad otherwise \end{matrix}
+$$
+일때,
+
+$$
+D_W(\vec{X_1}, \vec{X_2}) = \Vert G_W(\vec {X_1}) - G_W (\vec {X_2}) \Vert_2 \quad \quad \quad \quad \quad\quad \quad \quad\quad\quad\quad(1)
 $$
 
-Y = 0 if X1 and X2 are deemed similar,  else Y = 1
-1
-![lecun loss function_1](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_lecun_loss_function_1.jpeg.jpeg?raw=true)
+$$ \mathcal{L}(W) = \sum_{i=1}^{P} {L(W,(Y,\vec{X_1},\vec{X_2})^i)} \quad \quad \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad(2)
+$$
 
-2
-![lecun loss function_2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_lecun_loss_function_2.jpeg.jpeg?raw=true)
+$$
+L(W,(Y, \vec{X_1},\vec{X_2})^i) = (1 - Y) L_s (D^i_W) + Y L_D (D^i_W) \quad \quad\quad\quad\quad\quad\quad\quad(3)
+$$
+
+$$
+L(W, Y, \vec {X_1}, \vec {X_2}) = (1-Y)\frac 1 2 (D_W)^2 + (Y) \frac 1 2 \{max(0, m - D_W)\}^2 \quad\quad (4)
+$$
+
+즉, 두 입력 쌍 X1, X2가 네트워크를 통해 임배딩된 feature representation같의 유클리디안 거리가 similar 쌍일 때에는 작아지고, dis-similar 쌍일 경우에는 두 입력간의 거리가 최소 m보다 커지게끔 학습이 된다. (m은 margin을 나타내며, user가 설정하는 파라미터임)
+
+이 논문에서는 입력 쌍에 대한 embeding된 feature vector에 sigmoid activation을 적용한 h1, h2에 대해 weighted L1 distance를 이용한다.
+
+계산된 weighted L1 distance는 sigmoid activation 함수를 통해 prediction P가 계산된다
+
+##### prediction P with weighted L1 distance
+$$
+\mathbf{p} = \sigma (\sum{}_j \alpha_j \vert \mathbf{h}_{1, L-1}^{(j)} - \mathbf{h}_{2, L-1} ^{(j)} \vert)
+$$
+
+##### Loss Function
+$$
+\mathcal{L} (x_1^{(i)}, x_2^{(i)}) = \mathbf{y} (x_1^{(i)}, x_2^{(i)}) \log{\mathbf{p} (x_1^{(i)}, x_2^{(i)})} + (1 - \mathbf{y} (x_1^{(i)}, x_2^{(i)})) \log {(1 - \mathbf{p} (x_1^{(i)}, x_2^{(i)}))} + \lambda^T \vert \mathbf{w} \vert ^2
+$$
+
+![Siamese NN Architecture2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_network_architecture.jpeg?raw=true)
 
 
 
