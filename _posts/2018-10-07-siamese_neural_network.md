@@ -16,17 +16,17 @@ ML 영역에서 좋은 Feature를 학습시키는 과정은 많은 연산량을 
 우리는 샴 네트워크(siamese Network)를 통해 supervised Metric 기반의 image representation을 학습하고, 학습된 네트워크를 별도의 재학습 없이 One-shot Learning에 사용한다.
 
 One-shot classification model의 학습을 위해 image pair들의 class-identity를 구분하는 NN을 학습하는 것을 목표로 하였다.
-
+<br/>
 ![Siamese NN Strategy](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_fig1_strategy.png?raw=true)
-
+<br/>
 ## Deep Siamese Networks for Image Verification
 
 샴 네트워크는 입력이 구분되는 쌍둥이 네트워크로 구성되어 있으며, 상단에서 에너지 함수로써 네트워크가 연결된다. 이 함수는 고차원의 feature representation 간의 metric으로 계산된다. 쌍둥이 네트워크를 구성하는 파라미터는 공유된다. 네트워크의 파라미터가 공유되기 때문에 유사한 입력 쌍에 대한 두 네트워크의 기능이 동일하기 때문에 차원 공간에서 각각 다른 위치로의 맵핑할 수 없게 한다.
-
+<br/>
 ![Siamese NN Architecture1](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_network_architecture_1.jpeg?raw=true)
-
+<br/>
 LeCun이 제안한 방법(2005, [1])에서 저자는 같은 쌍에 대해서는 에너지를 감소하고, 다른 쌍에 대해서는 에너지를 증가시키는 contrastive energy function을 사용하였다.(아래 식4)
-
+<br/>
 $$
 Y = \{ \begin{matrix} 0,\quad if \space \vec{X_1} \space and \space \vec{X_2} \space are \space deemed\space similar \\ 1,\quad otherwise \end{matrix}
 $$
