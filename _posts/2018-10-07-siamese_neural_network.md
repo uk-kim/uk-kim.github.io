@@ -3,8 +3,10 @@ layout: post
 title: Siamese Neural Network for One-shot Image Recognition (샴 네트워크)
 tags: [Siamese Neural Network, One-shot Learning, Metric Learning]
 ---
-![Siamese NN Paper](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_paper_intro.png?raw=true)
+<img src="https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_paper_intro.png?raw=true" alt="Siamese NN Paper" width=80%>
 [paper](https://www.cs.cmu.edu/~rsalakhu/papers/oneshot1.pdf)
+
+
 
 ## Introduction
 ML 영역에서 좋은 Feature를 학습시키는 과정은 많은 연산량을 요구한다. 또한 <u>주어진 데이터의 수가 적은 상황에서의 Feature 학습은 매우 어렵다.</u> One-Shot Learning은 각 class별 1개의 data 만으로도 정확한 prediction이 가능하게 하는 것이다. 이 논문에서는 Siamese Neural Network를 통해서 입력 데이터들간의 Similarity 순위를 매기는 구조를 차용한다. 학습 후에는 새 데이터 뿐만 아니라 알지 못하는 분포의 새로운 class 전체에 대해서도 일반화 성능이 뛰어난 예측력을 지닌다.
@@ -17,14 +19,13 @@ ML 영역에서 좋은 Feature를 학습시키는 과정은 많은 연산량을 
 
 One-shot classification model의 학습을 위해 image pair들의 class-identity를 구분하는 NN을 학습하는 것을 목표로 하였다.
 
-![Siamese NN Strategy](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_fig1_strategy.png?raw=true)
+<img src="https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_fig1_strategy.png?raw=true" alt = "Siamese NN Strategy" width=70%>
 
 ## Deep Siamese Networks for Image Verification
 
 샴 네트워크는 입력이 구분되는 쌍둥이 네트워크로 구성되어 있으며, 상단에서 에너지 함수로써 네트워크가 연결된다. 이 함수는 고차원의 feature representation 간의 metric으로 계산된다. 쌍둥이 네트워크를 구성하는 파라미터는 공유된다. 네트워크의 파라미터가 공유되기 때문에 유사한 입력 쌍에 대한 두 네트워크의 기능이 동일하기 때문에 차원 공간에서 각각 다른 위치로의 맵핑할 수 없게 한다.
 
-![Siamese NN Architecture1](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_network_architecture_1.jpeg?raw=true)
-
+<img src="https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_network_architecture_1.jpeg?raw=true" alt="Siamese NN Architectural" width=60%>
 LeCun이 제안한 방법(2005, [1])에서 저자는 같은 쌍에 대해서는 에너지를 감소하고, 다른 쌍에 대해서는 에너지를 증가시키는 contrastive energy function을 사용하였다.(아래 식4)
 
 $$
@@ -64,13 +65,13 @@ $$
 \mathcal{L} (x_1^{(i)}, x_2^{(i)}) = \mathbf{y} (x_1^{(i)}, x_2^{(i)}) \log{\mathbf{p} (x_1^{(i)}, x_2^{(i)})} + (1 - \mathbf{y} (x_1^{(i)}, x_2^{(i)})) \log {(1 - \mathbf{p} (x_1^{(i)}, x_2^{(i)}))} + \lambda^T \vert \mathbf{w} \vert ^2
 $$
 <br/>
-![Siamese NN Architecture2](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_network_architecture.jpeg?raw=true)
+<img src="https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_network_architecture.jpeg?raw=true" alt="Siamese NN Architecture2" width=70%>
 <br/>
 
 ## Experiments
 
 #### The Omniglot Datasets
-![Omniglot Datasets](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/omniglot_dataset_characters.jpeg?raw=true)
+<img src="https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/omniglot_dataset_characters.jpeg?raw=true" alt="Omniglot Datasets" width=70%>
 
 Omniglot 데이터셋은 handwritten character 인식 분야에서 적은 샘플로 학습을 시키기 위한 표준 벤치마크  데이터셋이다. Omniglot 셋은 라틴어, 한글과 같이 잘 정립된 국제 언어의 50개 알파벳으로 이루어져 있다. 또한 Aurek-Besh, Klingon과 같은 가상의 문제 셋도 존재한다. 각 알파벳을 구성하는 문자의 수는 15~40개로 이루어져 있다. 이 알파벳들의 모든 문자들은 20명에 의해 각각 쓰여졌고, 40개의 알파벳으로 이루어진 background set(for training or validation), 10개의 알파벳으로 이루어진 evaluation set(for measure one-shot classification performance)으로 나누어 진다.
 
@@ -88,12 +89,12 @@ One-shot learning의 performance를 평가하기 위해 evaluation set에서 무
 
 첫번째 drawer가 생성한 문자는 테스트용, 두번째 drawer의 문자는 검증용으로, 첫번째 drawer의 각 문자는 두번째 drawer의 모든 문자와 비교하여 해당하는 클래스를 예측하는데 사용된다. 이 과정은 두번째 drawer를 기준으로도 수행되며 이 전체 과정을 반복하여 최종적으로 성능을 평가한다.
 
-![Omniglot Datasets](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_omniglot_evaluation.png?raw=true)
+<img src="https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_omniglot_evaluation.png?raw=true" alt="Omniglot Evaluation" width=50%>
 
 #### MNIST One-shot Trial
 Omniglot 데이타 셋은 클래스의 수가 각 클래스의 instance의 수보다 많기 때문에 “MNIST transpose”라고 불린다. 우리는 Omniglot 데이터셋으로 학습된 모델의 일반화 성능을 모니터링 하기 위해 10개의 알파벳으로 이루어진 MNIST 셋으로 평가하는 것을 흥미롭게 생각하였다. 10way One-shot classification 문제를 MNIST 데이터셋으로 수행한 결과는 아래와 같다.
 
-![mnist oneshot result](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_mnist_oneshot_result.png?raw=true)
+<img src="https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-10-07-siamese_nn/siamese_mnist_oneshot_result.png?raw=true" alt="MNIST one-shot Result" width=50%>
 
 성능이 매우 높지는 않지만,  10개 클래스에서 랜덤으로 선택했을 때의 정확도는 10%, 1-NN으로 했을 때의 정확도가 26.5%인것을 감안하면 MNIST 도메인으로 학습하지 않은 모델을 통한 70.3%는 유의한 결과라고 볼수 있음.
 
