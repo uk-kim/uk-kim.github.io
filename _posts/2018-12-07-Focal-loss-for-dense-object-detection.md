@@ -82,20 +82,16 @@ focal loss의 두가지 속성은 다음과 같다.
 
 ### 4. RetinaNet Detector
 
-RetinaNet은 <i>backbone</i> 네트워크와 두개의 task-specific <i>subnetworks</i>로 구성된 통합된 하나의 네트워크이다.
-RetinaNet is a single, unified network composed of a backbone network and two task-specific subnetworks.
-
-backbone 네트워크는 입력된 전체 이미지에 대해서 convolutional feature map을 계산하는 역할을 수행한다.
-The backbone is responsible for computing a convolutional feature map over an entire input image.
-
-첫번째 subnet은 backbone의 결과에서 convolutional 하게 object classification을 수행하는 단계이며, 두번째 subnet은 convolutional하게 bounding box를 추정하는 역할을 수행한다.
-
-The first subnet performs convolutional object classification on the backbone's output; the second subnet performs convolutional bounding box regression.
+RetinaNet은 <i>backbone</i> 네트워크와 두개의 task-specific <i>subnetworks</i>로 구성된 통합된 하나의 네트워크이다. backbone 네트워크는 입력된 전체 이미지에 대해서 convolutional feature map을 계산하는 역할을 수행한다. 첫번째 subnet은 backbone의 결과에서 convolutional 하게 object classification을 수행하는 단계이며, 두번째 subnet은 convolutional하게 bounding box를 추정하는 역할을 수행한다.
 
 ![Focal Loss RetinaNet architecture](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/retinanet_architecture.png?raw=true)
 
 ### 5. Experiments
 
+<b>$\alpha$, $\gamma$에 따른 성능 변화와 OHEM(online hard examples mining)과 성능 비교</b>
+
 ![Focal Loss Experiments](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/experiment_compair.png?raw=true)
 
+
+<b>타 Object Detection 알고리즘과 RetinaNet의 성능 비교</b>
 ![Object Detector Comparison](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/object_detector_compare.png?raw=true)
