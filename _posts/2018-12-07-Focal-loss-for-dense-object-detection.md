@@ -1,15 +1,19 @@
 ---
 layout: post
-title: Variational Auto Encoder의 이해
+title: Focal Loss for Dense Object Detection
 tags: [Test, Markdown]
 ---
 
 ## Focal Loss for Dense Object Detection
+
+![Focal Loss Paper](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/focal_loss_paper.png?raw=true)
+
+이 논문은 2017년 말에 공개된 논문으로써 기존의 Detection 알고리즘에서 분류기에서의 Loss Function으로 사용되던 CE(cross entropy)에 간단한 변형이 된 Focal Loss를 제안함으로써 분류 성능을 향상시는 방법을 소개합니다.
+
 ---
 
-</br>
-![Focal Loss Paper](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/ce_fl_compare_along_gamma.png?raw=true)
-</br>
+![Focal Loss](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/ce_fl_compare_along_gamma.png?raw=true)
+
 우리는 기존의 corss entropy에 $(1-p_t)^\gamma$ 텀을 추가한 <i>Focal Loss</i>라 명칭한 새로운 loss를 제안한다. $\gamma > .5$ 와 같이 설정하면 잘 분류가 된 $(p_t > .5)$ 샘플들에 대해서 상대적으로 loss 값을 감소시켜, 어렵고 잘못 분류된 샘플들에 대해서 모델이 더 집중할수 있도록 한다.
 
 ### Abstract
@@ -88,17 +92,13 @@ The backbone is responsible for computing a convolutional feature map over an en
 
 The first subnet performs convolutional object classification on the backbone's output; the second subnet performs convolutional bounding box regression.
 
-</br>
 ![Focal Loss RetinaNet architecture](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/retinanet_architecture.png?raw=true)
-</br>
 
 ### 5. Experiments
 
 
 
-</br>
 ![Focal Loss Experiments](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/experiment_compair.png?raw=true)
-</br>
 
 
 
