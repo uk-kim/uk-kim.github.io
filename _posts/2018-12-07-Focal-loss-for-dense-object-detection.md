@@ -96,19 +96,6 @@ The first subnet performs convolutional object classification on the backbone's 
 
 ### 5. Experiments
 
-
-
 ![Focal Loss Experiments](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/experiment_compair.png?raw=true)
 
-
-
-
-a
-a
-a
-a
-a
-a
-a
-a
-a
+![Object Detector Comparison](https://github.com/uk-kim/uk-kim.github.io/blob/master/_posts/2018-12-07-Focal-loss-for-dense-object-detection/object_detector_compare.png?raw=true)
