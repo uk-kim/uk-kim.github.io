@@ -79,7 +79,7 @@ $(document).ready(function() {
 ![image](https://user-images.githubusercontent.com/20642750/39189661-c22099f2-47a0-11e8-826e-2ec3ef4cc4f4.png)
 
 <script>
-// toc.js 
+// toc.js
 // Copied here for the example, can be placed in assets/js for real use in your template.
 // https://github.com/ghiculescu/jekyll-table-of-contents
 (function($){
