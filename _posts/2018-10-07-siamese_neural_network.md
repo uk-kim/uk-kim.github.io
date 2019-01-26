@@ -84,6 +84,7 @@ Omniglot 데이터셋은 handwritten character 인식 분야에서 적은 샘플
 $$
 C^\ast = \arg\max{}_c \mathbf{p} ^{(c)}
 $$
+
 One-shot learning의 performance를 평가하기 위해 evaluation set에서 무작위로 일정하게 선택한 20개의 문자를 2명의 drawer에서 선택한다.
 
 첫번째 drawer가 생성한 문자는 테스트용, 두번째 drawer의 문자는 검증용으로, 첫번째 drawer의 각 문자는 두번째 drawer의 모든 문자와 비교하여 해당하는 클래스를 예측하는데 사용된다. 이 과정은 두번째 drawer를 기준으로도 수행되며 이 전체 과정을 반복하여 최종적으로 성능을 평가한다.
